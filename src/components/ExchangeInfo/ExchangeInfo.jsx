@@ -1,6 +1,8 @@
 import styles from './ExchangeInfo.module.css';
 
-export const ExchangeInfo = ({ amount, from, to, rate, result }) => {
+export const ExchangeInfo = ({
+  exchangeInfo: { amount, from, to, rate, result },
+}) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.box}>

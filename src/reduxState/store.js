@@ -4,30 +4,28 @@ import currencyReducer from './currency/currencySlice';
 import storage from 'redux-persist/lib/storage';
 
 import {
-    persistStore,
-    persistReducer,
-    FLUSH,
-    REHYDRATE,
-    PAUSE,
-    PERSIST,
-    PURGE,
-    REGISTER,
-  } from 'redux-persist';
-
-
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 
 const persistConfig = {
-    key: 'root',
-    storage,
-  }
+  key: 'root',
+  storage,
+};
 
-  const persistedReducer = persistReducer(persistConfig, currencyReducer)
+const persistedReducer = persistReducer(persistConfig, currencyReducer);
 
 export const store = configureStore({
   reducer: {
     currency: persistedReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
@@ -35,4 +33,4 @@ export const store = configureStore({
     }),
 });
 
-export let persistor = persistStore(store);
+export const persistor = persistStore(store);

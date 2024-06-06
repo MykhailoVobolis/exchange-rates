@@ -15,20 +15,13 @@ export const App = () => {
   useEffect(() => {
     const options = {
       enableHighAccuracy: true,
-      timeout: 1000,
+      timeout: 5000,
       maximumAge: 0,
     };
 
     function success(pos) {
       const crd = pos.coords;
       dispatch(fetchBaseCurrency(crd));
-      console.log(
-        exchangeCurrency({
-          to: 'UAH',
-          from: 'USD',
-          amount: 15,
-        }),
-      );
     }
 
     function error(err) {
