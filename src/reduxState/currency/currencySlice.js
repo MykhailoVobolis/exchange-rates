@@ -3,7 +3,7 @@ import {
   buildCreateSlice,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import { exchangeCurrency } from 'service/exchangeAPI';
+import { exchangeCurrency, latestRates } from 'service/exchangeAPI';
 import { getUserInfo } from 'service/opencagedataApi';
 
 const handlePending = state => {
@@ -24,6 +24,18 @@ export const fetchCurrency = createAsyncThunk(
   async (exchangeData, thunkAPI) => {
     try {
       const data = await exchangeCurrency(exchangeData);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const fetchRates = createAsyncThunk(
+  'currency/fetchRates',
+  async (baseCurrency, thunkAPI) => {
+    try {
+      const data = await latestRates(baseCurrency);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -76,11 +88,19 @@ export const currencySlice = createSlice({
         state.isLoading = false;
         state.exchangeInfo = action.payload;
       })
-      .addCase(fetchCurrency.rejected, handleRejected);
+      .addCase(fetchCurrency.rejected, handleRejected)
+      // Додавання курсів валют
+      .addCase(fetchRates.pending, handlePending)
+      .addCase(fetchRates.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.rates = action.payload;
+      })
+      .addCase(fetchRates.rejected, handleRejected);
   },
   selectors: {
     selectBaseCurrency: state => state.baseCurrency,
     selectExchangeInfo: state => state.exchangeInfo,
+    selectRates: state => state.rates,
     selectLoading: state => state.isLoading,
     selectError: state => state.isError,
   },
@@ -91,6 +111,7 @@ export default currencySlice.reducer;
 export const {
   selectBaseCurrency,
   selectExchangeInfo,
+  selectRates,
   selectLoading,
   selectError,
 } = currencySlice.selectors;

@@ -1,10 +1,34 @@
 import { Wave } from 'react-animated-text';
 
-import { Container, Heading, Section } from 'components';
+import { Container, Heading, Loader, RatesList, Section } from 'components';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchRates,
+  selectBaseCurrency,
+  selectError,
+  selectLoading,
+  selectRates,
+} from 'reduxState/currency/currencySlice';
+import { useEffect } from 'react';
 
 export const Rates = () => {
-  const isError = false;
+  const dispatch = useDispatch();
+  const isError = useSelector(selectError);
+  const isLoading = useSelector(selectLoading);
+  const baseCurrency = useSelector(selectBaseCurrency);
+  const rates = useSelector(selectRates);
 
+  useEffect(() => {
+    dispatch(fetchRates(baseCurrency));
+  }, [dispatch]);
+
+  const convertEntriesToObjects = rates => {
+    return rates
+      .filter(([key]) => key !== baseCurrency)
+      .map(([key, value]) => ({ key, value: (1 / value).toFixed(2) }));
+  };
+
+  const arrayObjectsRates = convertEntriesToObjects(rates);
   return (
     <Section>
       <Container>
@@ -19,7 +43,8 @@ export const Rates = () => {
             />
           }
         />
-
+        <RatesList rates={arrayObjectsRates} />
+        {isLoading && <Loader />}
         {isError && (
           <Heading
             error
