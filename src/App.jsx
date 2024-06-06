@@ -8,7 +8,6 @@ import {
   fetchBaseCurrency,
   setDefaultCurrency,
 } from 'reduxState/currency/currencySlice';
-import { exchangeCurrency } from './service';
 
 export const App = () => {
   const dispatch = useDispatch();

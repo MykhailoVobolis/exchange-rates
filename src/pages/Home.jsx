@@ -22,11 +22,9 @@ export const Home = () => {
     <Section>
       <Container>
         <ExchangeForm />
-        {exchangeInfo | !isLoading && (
-          <ExchangeInfo exchangeInfo={exchangeInfo} />
-        )}
+        {exchangeInfo && <ExchangeInfo exchangeInfo={exchangeInfo} />}
         {isLoading && <Loader />}
-        {isError && (
+        {isError === true && (
           <Heading
             error
             title="Something went wrong...😐 Check the data validity and try again!"

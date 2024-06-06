@@ -6,6 +6,15 @@ import {
 import { exchangeCurrency } from 'service/exchangeAPI';
 import { getUserInfo } from 'service/opencagedataApi';
 
+const handlePending = state => {
+  state.isLoading = true;
+};
+
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.isError = action.payload;
+};
+
 const createSlice = buildCreateSlice({
   creators: { asyncThunk: asyncThunkCreator },
 });
@@ -48,17 +57,11 @@ export const currencySlice = createSlice({
         }
       },
       {
-        pending: (state, action) => {
-          state.isLoading = true;
-          state.isError = null;
-        },
+        pending: handlePending,
         fulfilled: (state, action) => {
           state.baseCurrency = action.payload;
         },
-        rejected: (state, action) => {
-          state.isLoading = false;
-          state.isError = action.payload;
-        },
+        rejected: handleRejected,
       },
     ),
     setDefaultCurrency: creator.reducer(state => {
@@ -68,18 +71,12 @@ export const currencySlice = createSlice({
 
   extraReducers: builder => {
     builder
-      .addCase(fetchCurrency.pending, state => {
-        state.isLoading = true;
-        state.isError = null;
-      })
+      .addCase(fetchCurrency.pending, handlePending)
       .addCase(fetchCurrency.fulfilled, (state, action) => {
         state.isLoading = false;
         state.exchangeInfo = action.payload;
       })
-      .addCase(fetchCurrency.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = action.payload;
-      });
+      .addCase(fetchCurrency.rejected, handleRejected);
   },
   selectors: {
     selectBaseCurrency: state => state.baseCurrency,
