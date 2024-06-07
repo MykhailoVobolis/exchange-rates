@@ -1,6 +1,6 @@
 import { RiExchangeDollarFill } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
-import { fetchCurrency } from 'reduxState/currency/currencySlice';
+import { fetchCurrency } from 'reduxState/currency/operations';
 import styles from './ExchangeForm.module.css';
 
 export const ExchangeForm = () => {

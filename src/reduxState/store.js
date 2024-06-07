@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import currencyReducer from './currency/currencySlice';
+import currencyReducer from '../reduxState/currency/currencySlice';
 
 import storage from 'redux-persist/lib/storage';
 

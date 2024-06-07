@@ -2,13 +2,13 @@ import { Wave } from 'react-animated-text';
 
 import { Container, Heading, Loader, RatesList, Section } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchRates } from 'reduxState/currency/operations';
 import {
-  fetchRates,
   selectBaseCurrency,
   selectError,
   selectLoading,
   selectRates,
-} from 'reduxState/currency/currencySlice';
+} from 'reduxState/currency/selectors';
 import { useEffect } from 'react';
 
 export const Rates = () => {

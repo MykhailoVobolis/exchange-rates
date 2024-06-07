@@ -11,7 +11,7 @@ import {
   selectError,
   selectExchangeInfo,
   selectLoading,
-} from 'reduxState/currency/currencySlice';
+} from 'reduxState/currency/selectors';
 
 export const Home = () => {
   const exchangeInfo = useSelector(selectExchangeInfo);
